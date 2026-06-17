@@ -9,7 +9,7 @@ import numpy as np
 
 # ==========================================
 # DATASETS: Where the data is loaded and used
-# ==========================================
+
 class DementiaMultimodalDataset(Dataset):
     """
     Custom PyTorch Dataset that loads both MRI (ADNI/OASIS)
@@ -28,9 +28,9 @@ class DementiaMultimodalDataset(Dataset):
     def __getitem__(self, idx):
         row = self.metadata.iloc[idx]
         
-        # 1. Load the dataset for Branch 1 (OASIS / ADNI MRI)
+        
         mri_path = os.path.join(self.mri_dir, row['mri_filename'])
-        # Load 2D/3D MRI slide (converting to RGB for ResNet compatibility here)
+    
         mri_image = Image.open(mri_path).convert('RGB')
         
         if self.transform:
@@ -78,7 +78,7 @@ class MultimodalDementiaModel(nn.Module):
             nn.Softmax(dim=1)
         )
         
-        # --- Classification Layer ---
+        
         self.classifier = nn.Sequential(
             nn.Linear(fusion_dim, 256),
             nn.ReLU(),
@@ -151,7 +151,6 @@ if __name__ == "__main__":
     # Assuming MFCC features have 40 coefficients per frame
     model = MultimodalDementiaModel(tabular_input_dim=40, lstm_hidden_dim=256, num_classes=3)
     
-    # --- 5. Evaluation / Accuracy Calculation Loop (Example) ---
     def calculate_accuracy(model, data_loader, device='cpu'):
         model.eval()
         correct = 0
